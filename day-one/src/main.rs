@@ -36,9 +36,8 @@ fn main() -> std::io::Result<()> {
 
     let first_answer = part_one(&input);
     let second_answer = part_two(&input);
-
+    (1..1000).
     println!("THE ANSWER TO FIRST PART IS: {}", first_answer);
     println!("THE ANSWER TO SECOND PART IS: {}", second_answer);
-
     Ok(())
 }
