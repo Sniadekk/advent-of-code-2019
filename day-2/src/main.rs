@@ -1,18 +1,42 @@
-use common::intcode_computer::Computer;
-use std::fs::read_to_string;
+use common::intcode_computer::{get_input, Computer, Either};
+
+const ERROR_MSG: &str = "This program shouldn't return vector of outputs!";
+
+fn first_part() {
+    let mut computer = Computer::new(get_input(), None);
+    &computer.replace_position(1, 12);
+    &computer.replace_position(2, 2);
+    match computer.run_program() {
+        Either::Left(val) => println!("ANSWER TO THE FIRST PART: {:#?}", val),
+        Either::Right(_) => println!("{}", ERROR_MSG),
+    }
+    println!("ANSWER TO THE FIRST PART: {:#?}", computer.run_program());
+}
+
+fn second_part() {
+    let mut computer = Computer::new(get_input(), None);
+    for x in 0..100 {
+        for y in 0..100 {
+            &computer.reload_program();
+            &computer.replace_position(1, x);
+            &computer.replace_position(2, y);
+            let result = &computer.run_program();
+            match result {
+                Either::Left(val) => {
+                    if *val == 19690720 {
+                        println!("ANSWER TO THE SECOND PART: {}", 100 * x + y);
+                        return;
+                    }
+                }
+                Either::Right(_) => panic!(ERROR_MSG),
+            }
+        }
+    }
+    println!("ANSWER TO THE SECOND PART: {:#?}", second_part());
+}
 
 fn main() -> std::io::Result<()> {
-    // read gravity assist program from input file
-    let mut program: Vec<i16> = read_to_string("input.txt")?
-        .split(",")
-        .map(|num| {
-            num.parse::<i16>()
-                .expect("Unexpected string that is not a number")
-        })
-        .collect();
-
-    let mut computer = Computer::new(&program);
-    println!("ANSWER TO THE FIRST PART: {}", computer.run_program());
-
+    first_part();
+    second_part();
     Ok(())
 }
