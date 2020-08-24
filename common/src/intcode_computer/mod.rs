@@ -176,6 +176,18 @@ impl From<&Vec<i32>> for Computer {
     }
 }
 
+impl From<(Vec<i32>, Instructions)> for Computer {
+    fn from((program, instructions): (Vec<i32>, Instructions)) -> Self {
+        Self {
+            program_backup: program.clone(),
+            curr: 0,
+            program,
+            instructions: Some(instructions),
+            should_break: false,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
